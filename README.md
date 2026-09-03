@@ -12,8 +12,8 @@ O sistema simula uma agência de viagens online, onde o usuário escolhe um dest
 
 ```mermaid
 erDiagram
-  USUARIOS ||--o{ SOLICITACOES : faz
-  DESTINOS ||--o{ SOLICITACOES : refere
+  USUARIOS ||--o{ SOLICITACAO_VAIGEM : faz
+  DESTINOS ||--o{ SOLICITACAO_VAIGEM : refere
   DESTINOS ||--o{ AEROPORTOS : possui
   DESTINOS ||--o{ HOTEIS : possui
   COMPANHIAS_AEREAS ||--o{ VOOS : opera
@@ -22,7 +22,7 @@ erDiagram
   HOTEIS ||--o{ TIPOS_QUARTO : possui
   SOLICITACAO_VIAGEM ||--o{ SOLICITACAO_VOO : inclui
   VOOS ||--o{ SOLICITACAO_VOO : reservado
-  SOLICITACOES ||--o{ SOLICITACAO_HOTEL : inclui
+  SOLICITACAO_VAIGEM ||--o{ SOLICITACAO_HOTEL : inclui
   TIPOS_QUARTO ||--o{ SOLICITACAO_HOTEL : reservado
 
   USUARIOS {
