@@ -69,6 +69,8 @@ erDiagram
     int id_hotel FK
     string nome
     decimal preco_diaria
+    int vagas_disponiveis
+
   }
   SOLICITACOES {
     int id_solicitacao PK
