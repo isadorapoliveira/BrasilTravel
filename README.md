@@ -20,7 +20,7 @@ erDiagram
   AEROPORTOS ||--o{ VOOS : origem
   AEROPORTOS ||--o{ VOOS : chegada
   HOTEIS ||--o{ TIPOS_QUARTO : possui
-  SOLICITACOES ||--o{ SOLICITACAO_VOO : inclui
+  SOLICITACAO_VIAGEM ||--o{ SOLICITACAO_VOO : inclui
   VOOS ||--o{ SOLICITACAO_VOO : reservado
   SOLICITACOES ||--o{ SOLICITACAO_HOTEL : inclui
   TIPOS_QUARTO ||--o{ SOLICITACAO_HOTEL : reservado
@@ -72,7 +72,7 @@ erDiagram
     int vagas_disponiveis
 
   }
-  SOLICITACOES {
+  SOLICITACAO_VIAGEM {
     int id_solicitacao PK
     int id_usuario FK
     int id_destino FK
@@ -86,14 +86,14 @@ erDiagram
     int id_solicitacao_voo PK
     int id_solicitacao FK
     int id_voo FK
-    string tipo_trecho
     int qtd_passageiros
   }
   SOLICITACAO_HOTEL {
     int id_solicitacao_hotel PK
     int id_solicitacao FK
     int id_tipo_quarto FK
-    date data_checkin
-    date data_checkout
+    date data_inicio
+    date data_fim
+    date data_reserva
   }
 ```
