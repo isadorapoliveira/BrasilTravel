@@ -77,7 +77,6 @@ erDiagram
     int id_usuario FK
     int id_destino FK
     string categoria
-    string tipo_solicitacao
     date data_ida
     date data_volta
     string status_solicitacao
