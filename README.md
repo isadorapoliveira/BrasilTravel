@@ -14,7 +14,7 @@ O **BrasilTravel** é uma aplicação de banco de dados relacional voltada à ge
 
 O sistema permite consultar destinos, aeroportos, companhias aéreas e voos disponíveis, além de registrar solicitações de viagem — associando cliente e voo, com acompanhamento de status (ex.: *Finalizada*) e geração de relatórios gerenciais.
 
-A modelagem completa (esquema conceitual e dicionário de dados) está disponível no documento em [`/docs`](./docs).
+A modelagem completa (esquema conceitual e dicionário de dados) está disponível no documento em [`/docs`]([./docs](https://docs.google.com/document/d/1ZimgIUvIiVJFccTN62y9IjEm_NN7Z66J/edit)).
 
 ## Funcionalidades
 
