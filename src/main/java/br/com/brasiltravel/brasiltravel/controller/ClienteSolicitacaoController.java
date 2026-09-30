@@ -89,8 +89,8 @@ public class ClienteSolicitacaoController {
             return "redirect:/login";
         }
 
-        if (form.getDataIda() != null && form.getDataVolta() != null && form.getDataVolta().isBefore(form.getDataIda())) {
-            bindingResult.rejectValue("dataVolta", "dataVolta.invalida", "A data de volta não pode ser anterior à data de ida.");
+        if (form.getDataIda() != null && form.getDataVolta() != null && !form.getDataVolta().isAfter(form.getDataIda())) {
+            bindingResult.rejectValue("dataVolta", "dataVolta.invalida", "A data de volta deve ser posterior à data de ida.");
         }
         if (form.getIdVooIda() != null && form.getIdVooIda().equals(form.getIdVooVolta())) {
             bindingResult.rejectValue("idVooVolta", "idVooVolta.invalido", "O voo de volta deve ser diferente do voo de ida.");

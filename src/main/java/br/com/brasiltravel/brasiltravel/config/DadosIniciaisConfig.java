@@ -130,7 +130,7 @@ public class DadosIniciaisConfig implements CommandLineRunner {
         };
 
         List<Voo> voosHistoricos = gerarMalhaAerea(aeroportos, companhias, INICIO_HISTORICO, FIM_HISTORICO, 7, false);
-        List<Voo> voosFuturos = gerarMalhaAerea(aeroportos, companhias, DATA_REFERENCIA, DATA_REFERENCIA.plusDays(30), 1, true);
+        List<Voo> voosFuturos = gerarMalhaAereaFuturaCompleta(aeroportos, companhias);
         gerarSolicitacoesDemonstracao(clientes, voosHistoricos);
 
         System.out.println("Dados comerciais BrasilTravel carregados. Admin: " + admin.getEmail()
@@ -141,33 +141,61 @@ public class DadosIniciaisConfig implements CommandLineRunner {
     private List<Voo> gerarMalhaAerea(Aeroporto[] aeroportos, CompanhiaAerea[] companhias, LocalDate inicio, LocalDate fim, int intervaloDias, boolean ativo) {
         List<Voo> voos = new ArrayList<>();
         for (LocalDate data = inicio; !data.isAfter(fim); data = data.plusDays(intervaloDias)) {
-            int[][] rotas = rotasComerciais();
-            for (int[] rota : rotas) {
-                int i = rota[0];
-                int j = rota[1];
-                CompanhiaAerea companhia = companhias[Math.floorMod(i * 31 + j * 7 + data.getDayOfYear(), companhias.length)];
-                int hora = 6 + Math.floorMod(i * 2 + j + data.getDayOfMonth(), 13);
-                int minuto = Math.floorMod(i + j + data.getDayOfMonth(), 2) * 30;
-                int duracaoHoras = 1 + Math.abs(i - j) % 4;
-                int duracaoMinutos = Math.floorMod(i + j, 3) * 15;
-                BigDecimal preco = BigDecimal.valueOf(260 + (Math.abs(i - j) * 52L) + (data.getMonthValue() * 14L) + (ativo ? 45L : 0L));
-                ClasseVoo classe = (sequencialVoo % 8 == 0) ? ClasseVoo.EXECUTIVA : ClasseVoo.ECONOMICA;
-                // Capacidade operacional exibida pelo site: representa a cota comercial
-                // disponível para a agência, não a capacidade física total da aeronave.
-                int capacidadeTotal = (classe == ClasseVoo.EXECUTIVA)
-                        ? 6 + Math.floorMod(i + j + data.getDayOfYear(), 3)
-                        : 8 + Math.floorMod(i * 3 + j * 5 + data.getDayOfYear(), 7);
-                int vagas = capacidadeTotal;
-                String numero = companhia.getCodigoIata() + String.format("%05d", sequencialVoo);
-
-                voos.add(voo(companhia, aeroportos[i], aeroportos[j], numero,
-                        data.atTime(hora, minuto),
-                        data.atTime(hora, minuto).plusHours(duracaoHoras).plusMinutes(duracaoMinutos),
-                        preco.toString(), capacidadeTotal, vagas, classe, ativo));
-                sequencialVoo++;
+            for (int[] rota : rotasComerciais()) {
+                voos.add(criarVooDaRota(aeroportos, companhias, data, rota[0], rota[1], ativo));
             }
         }
         return voos;
+    }
+
+    private List<Voo> gerarMalhaAereaFuturaCompleta(Aeroporto[] aeroportos, CompanhiaAerea[] companhias) {
+        // Malha futura de demonstração:
+        // - mantém a janela previamente combinada: 27/09/2026 a 27/10/2026;
+        // - cria todas as combinações aeroporto origem -> aeroporto destino;
+        // - usa quatro datas dentro da janela para manter volume controlado e garantir ida + volta posterior.
+        List<Voo> voos = new ArrayList<>();
+        LocalDate[] datasFuturas = new LocalDate[] {
+                DATA_REFERENCIA,
+                DATA_REFERENCIA.plusDays(10),
+                DATA_REFERENCIA.plusDays(20),
+                DATA_REFERENCIA.plusDays(30)
+        };
+
+        for (LocalDate data : datasFuturas) {
+            for (int origem = 0; origem < aeroportos.length; origem++) {
+                for (int destino = 0; destino < aeroportos.length; destino++) {
+                    if (origem == destino) {
+                        continue;
+                    }
+                    voos.add(criarVooDaRota(aeroportos, companhias, data, origem, destino, true));
+                }
+            }
+        }
+        return voos;
+    }
+
+    private Voo criarVooDaRota(Aeroporto[] aeroportos, CompanhiaAerea[] companhias, LocalDate data, int i, int j, boolean ativo) {
+        CompanhiaAerea companhia = companhias[Math.floorMod(i * 31 + j * 7 + data.getDayOfYear(), companhias.length)];
+        int hora = 6 + Math.floorMod(i * 2 + j + data.getDayOfMonth(), 13);
+        int minuto = Math.floorMod(i + j + data.getDayOfMonth(), 2) * 30;
+        int duracaoHoras = 1 + Math.abs(i - j) % 4;
+        int duracaoMinutos = Math.floorMod(i + j, 3) * 15;
+        BigDecimal preco = BigDecimal.valueOf(260 + (Math.abs(i - j) * 52L) + (data.getMonthValue() * 14L) + (ativo ? 45L : 0L));
+        ClasseVoo classe = (sequencialVoo % 8 == 0) ? ClasseVoo.EXECUTIVA : ClasseVoo.ECONOMICA;
+        // Capacidade operacional exibida pelo site: representa a cota comercial
+        // disponível para a agência, não a capacidade física total da aeronave.
+        int capacidadeTotal = (classe == ClasseVoo.EXECUTIVA)
+                ? 6 + Math.floorMod(i + j + data.getDayOfYear(), 3)
+                : 8 + Math.floorMod(i * 3 + j * 5 + data.getDayOfYear(), 7);
+        int vagas = capacidadeTotal;
+        String numero = companhia.getCodigoIata() + String.format("%05d", sequencialVoo);
+
+        Voo vooCriado = voo(companhia, aeroportos[i], aeroportos[j], numero,
+                data.atTime(hora, minuto),
+                data.atTime(hora, minuto).plusHours(duracaoHoras).plusMinutes(duracaoMinutos),
+                preco.toString(), capacidadeTotal, vagas, classe, ativo);
+        sequencialVoo++;
+        return vooCriado;
     }
 
     private int[][] rotasComerciais() {

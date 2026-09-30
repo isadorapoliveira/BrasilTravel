@@ -86,8 +86,8 @@ public class SolicitacaoViagemService {
             validarVooVoltaDoDestino(vooVolta, destinoPrincipal);
             validarAeroportoRetorno(vooVolta, aeroportoPartida);
             validarDataDoVoo(vooVolta, form.getDataVolta(), "volta");
-            if (vooVolta.getDataHoraPartida().toLocalDate().isBefore(vooIda.getDataHoraPartida().toLocalDate())) {
-                throw new IllegalArgumentException("O voo de volta deve ocorrer depois do voo de ida.");
+            if (!vooVolta.getDataHoraPartida().toLocalDate().isAfter(vooIda.getDataHoraPartida().toLocalDate())) {
+                throw new IllegalArgumentException("O voo de volta deve ocorrer em data posterior ao voo de ida.");
             }
         }
 
@@ -192,8 +192,8 @@ public class SolicitacaoViagemService {
         if (dataIda.isBefore(DATA_REFERENCIA)) {
             throw new IllegalArgumentException("A data de ida não pode ser anterior à data atual de referência do sistema.");
         }
-        if (dataVolta != null && dataVolta.isBefore(dataIda)) {
-            throw new IllegalArgumentException("A data de volta não pode ser anterior à data de ida.");
+        if (dataVolta != null && !dataVolta.isAfter(dataIda)) {
+            throw new IllegalArgumentException("A data de volta deve ser posterior à data de ida.");
         }
     }
 

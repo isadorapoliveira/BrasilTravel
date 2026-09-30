@@ -179,6 +179,18 @@
         }
     }
 
+    function existeVoltaPosteriorPara(optionIda) {
+        const aeroportoSelecionado = aeroportoPartida.value;
+        const destinoSelecionado = destinoPrincipal.value;
+        return Array.from(vooVolta.options).some(optionVolta => optionVolta.value
+            && aeroportoSelecionado
+            && destinoSelecionado
+            && optionVolta.dataset.origemCidade === destinoSelecionado
+            && optionVolta.dataset.destinoAeroporto === aeroportoSelecionado
+            && optionVolta.value !== optionIda.value
+            && optionVolta.dataset.data > optionIda.dataset.data);
+    }
+
     function opcoesIdaCompativeis() {
         const aeroportoSelecionado = aeroportoPartida.value;
         const destinoSelecionado = destinoPrincipal.value;
@@ -187,7 +199,8 @@
             && destinoSelecionado
             && option.dataset.origemAeroporto === aeroportoSelecionado
             && option.dataset.destinoCidade === destinoSelecionado
-            && option.dataset.data >= hojeReferencia);
+            && option.dataset.data >= hojeReferencia
+            && existeVoltaPosteriorPara(option));
     }
 
     function opcoesVoltaCompativeis() {
@@ -202,7 +215,7 @@
             && option.dataset.origemCidade === destinoSelecionado
             && option.dataset.destinoAeroporto === aeroportoSelecionado
             && option.value !== vooIdaSelecionado
-            && option.dataset.data >= dataIda);
+            && option.dataset.data > dataIda);
     }
 
     function atualizarDatasIda() {
