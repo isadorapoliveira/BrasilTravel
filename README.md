@@ -6,7 +6,6 @@ Sistema web de agência de viagens aéreas nacionais desenvolvido em Java Spring
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-view-005F0F?logo=thymeleaf&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-relacional-4169E1?logo=postgresql&logoColor=white)
-![Render](https://img.shields.io/badge/Render-Deploy-46E3B7?logo=render&logoColor=white)
 
 ## Sobre o projeto
 
@@ -36,7 +35,6 @@ A modelagem completa (esquema conceitual e dicionário de dados) está disponív
 | Camada de visão | Thymeleaf |
 | Banco de dados | PostgreSQL |
 | Gerenciador de dependências | Maven |
-| Hospedagem | Render |
 
 ## Execução local
 
@@ -108,18 +106,6 @@ psql -U postgres -d brasiltravel -f brasiltravel_dump.sql
 
 A listagem administrativa de voos exibe apenas voos futuros e usa paginação de 20 registros por página, preservando os filtros de aeroporto de origem e destino. Isso evita travamentos visuais quando o banco está povoado com muitas combinações de voos.
 
-## Deploy (Render)
-
-O deploy usa o `Dockerfile` do projeto (Web Service do tipo Docker) com um PostgreSQL do Render.
-
-| Variável | Valor |
-| --- | --- |
-| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://<host-interno-render>:5432/<nome-do-banco>` |
-| `SPRING_DATASOURCE_USERNAME` | fornecido pelo banco PostgreSQL no Render |
-| `SPRING_DATASOURCE_PASSWORD` | fornecido pelo banco PostgreSQL no Render |
-| `PORT` | definida automaticamente pelo Render |
-
-Aplicação publicada: *(inserir o link do Render)*
 
 ## Vídeo de demonstração
 
@@ -133,5 +119,7 @@ Aplicação publicada: *(inserir o link do Render)*
 | Luís Felipe dos Anjos de Carvalho |
 
 **Professora:** Rebeca Schroeder Freitas
+
 **Disciplina:** Banco de Dados II
+
 **Curso/Turma:** TADS 2026/02
