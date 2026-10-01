@@ -74,6 +74,30 @@ java version "21.x.x"
 
 ---
 
+## Como clonar o repositório
+
+Abra o PowerShell na pasta onde deseja salvar o projeto.
+
+Exemplo:
+
+```powershell
+cd D:\Faculdade\BAN2\Trabalho01
+```
+
+Clone o repositório:
+
+```powershell
+git clone https://github.com/isadorapoliveira/BrasilTravel.git
+```
+
+Acesse a pasta do projeto:
+
+```powershell
+cd BrasilTravel
+```
+
+Depois disso, siga as etapas de configuração do banco de dados e execução local descritas abaixo.
+
 ## Banco de dados local
 
 O projeto utiliza PostgreSQL.
@@ -255,6 +279,8 @@ O cliente pode criar uma solicitação selecionando:
 - quantidade de passageiros.
 
 A data de volta deve ser posterior à data de ida.
+
+Para selecionar o voo de volta, primeiro é necessário selecionar o voo de ida. Somente após a escolha do voo de ida o sistema desbloqueia as opções de data de volta e voo de volta disponíveis para aquela combinação.
 
 ### Voos
 
