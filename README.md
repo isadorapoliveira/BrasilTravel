@@ -147,7 +147,7 @@ Abra o PowerShell na pasta onde o projeto foi salvo.
 Exemplo:
 
 ```powershell
-cd D:\Faculdade\BAN2\Trabalho01\BrasilTravel-nova-versao
+cd D:\Faculdade\BAN2\Trabalho01\BrasilTravel
 ```
 
 Execute:
