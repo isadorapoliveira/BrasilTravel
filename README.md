@@ -1,64 +1,182 @@
 # BrasilTravel
 
-Sistema web de agência de viagens aéreas nacionais desenvolvido em Java Spring Boot, Thymeleaf e PostgreSQL.
+Sistema web de agência de viagens aéreas nacionais desenvolvido em **Java Spring Boot**, **Thymeleaf** e **PostgreSQL**.
 
-![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)
+![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?logo=springboot&logoColor=white)
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-view-005F0F?logo=thymeleaf&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-relacional-4169E1?logo=postgresql&logoColor=white)
 
+---
+
 ## Sobre o projeto
 
-O **BrasilTravel** é uma aplicação de banco de dados relacional voltada à gestão de voos nacionais, desenvolvida como Fase 1 do projeto da disciplina de Banco de Dados II.
+O **BrasilTravel** é uma aplicação web desenvolvida como Fase 1 do projeto da disciplina de **Banco de Dados II**, com foco em banco de dados relacional.
 
-O sistema permite consultar destinos, aeroportos, companhias aéreas e voos disponíveis, além de registrar solicitações de viagem, associando cliente e voo, com acompanhamento de status (ex.: *Finalizada*) e geração de relatórios gerenciais.
+O sistema representa uma agência de viagens aéreas nacionais. Ele permite o gerenciamento de destinos, aeroportos, companhias aéreas, voos e solicitações de viagem. Também possui relatórios gerenciais construídos a partir das informações cadastradas no banco de dados.
 
-A modelagem completa (esquema conceitual e dicionário de dados) está disponível no documento em [`/docs`](https://docs.google.com/document/d/1ZimgIUvIiVJFccTN62y9IjEm_NN7Z66J/edit).
+A modelagem completa, incluindo esquema conceitual, esquema lógico e dicionário de dados, está disponível no documento da disciplina.
+
+---
 
 ## Funcionalidades
 
-| Categoria | Operações |
+| Categoria | Funcionalidades |
 | --- | --- |
 | Destinos | Cadastro, consulta, atualização e remoção |
 | Aeroportos | Cadastro, consulta, atualização e remoção |
 | Companhias aéreas | Cadastro, consulta, atualização e remoção |
 | Voos | Cadastro, consulta, atualização e remoção |
-| Solicitações (associativa) | Registro de solicitação de viagem, acompanhamento e atualização de status |
+| Solicitações de viagem | Registro de solicitação, seleção de voos de ida e volta, acompanhamento e atualização de status |
 | Relatórios | Viagens por companhia aérea, ocupação e disponibilidade de voos, demanda por destino |
+| Usuários | Acesso de administrador e cliente |
 
-## Tecnologias
+---
 
-| Camada | Tecnologia |
+## Tecnologias utilizadas
+
+| Item | Tecnologia / Versão |
 | --- | --- |
-| Linguagem | Java 17 |
-| Framework | Spring Boot |
-| Camada de visão | Thymeleaf |
+| Linguagem | Java JDK 21 |
+| Framework | Spring Boot 3.5.16 |
+| Interface | Thymeleaf |
 | Banco de dados | PostgreSQL |
-| Gerenciador de dependências | Maven |
+| Persistência | Spring Data JPA / Hibernate |
+| Gerenciador de dependências | Maven Wrapper incluso no projeto |
+| Servidor embutido | Apache Tomcat |
 
-## Execução local
+> Não é necessário instalar o Maven manualmente, pois o projeto já possui Maven Wrapper (`mvnw` e `mvnw.cmd`).
 
-1. Criar o banco PostgreSQL local:
+---
+
+## Pré-requisitos
+
+Antes de executar o projeto, é necessário ter instalado:
+
+- Java JDK 21;
+- PostgreSQL;
+- Git;
+- PowerShell, Prompt de Comando ou terminal equivalente.
+
+Para conferir a versão do Java:
+
+```powershell
+java -version
+```
+
+O resultado deve indicar uma versão Java 21.
+
+Exemplo:
+
+```text
+java version "21.x.x"
+```
+
+---
+
+## Banco de dados local
+
+O projeto utiliza PostgreSQL.
+
+Antes de executar a aplicação, é necessário criar o banco de dados local chamado:
+
+```text
+brasiltravel
+```
+
+No PostgreSQL, execute:
 
 ```sql
 CREATE DATABASE brasiltravel;
 ```
 
-2. Ajustar `src/main/resources/application.properties` com usuário e senha do PostgreSQL.
+Também é possível criar pelo PowerShell:
 
-3. Rodar o projeto:
+```powershell
+psql -U postgres -c "CREATE DATABASE brasiltravel;"
+```
+
+---
+
+## Configuração do banco
+
+As configurações principais estão no arquivo:
+
+```text
+src/main/resources/application.properties
+```
+
+Por padrão, o projeto utiliza:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/brasiltravel
+spring.datasource.username=postgres
+spring.datasource.password=udesc
+```
+
+Caso o PostgreSQL local use outra senha, há duas opções.
+
+### Opção 1 — Alterar o arquivo `application.properties`
+
+Altere a linha:
+
+```properties
+spring.datasource.password=udesc
+```
+
+para a senha do seu PostgreSQL local.
+
+### Opção 2 — Usar variáveis de ambiente no PowerShell
+
+Antes de rodar o projeto, execute:
+
+```powershell
+$env:SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/brasiltravel"
+$env:SPRING_DATASOURCE_USERNAME="postgres"
+$env:SPRING_DATASOURCE_PASSWORD="SUA_SENHA_DO_POSTGRES"
+```
+
+Depois rode a aplicação normalmente.
+
+---
+
+## Como executar o projeto
+
+Abra o PowerShell na pasta onde o projeto foi salvo.
+
+Exemplo:
+
+```powershell
+cd D:\Faculdade\BAN2\Trabalho01\BrasilTravel-nova-versao
+```
+
+Execute:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-> Em Linux/Mac, use `./mvnw spring-boot:run`.
+Em Linux ou Mac:
 
-4. Acessar:
+```bash
+./mvnw spring-boot:run
+```
+
+Aguarde aparecer no terminal uma mensagem semelhante a:
+
+```text
+Started BrasiltravelApplication
+```
+
+Depois acesse no navegador:
 
 ```text
 http://localhost:8080
 ```
+
+> O terminal precisa permanecer aberto enquanto o sistema estiver em uso. Se o terminal for fechado, a aplicação será encerrada.
+
+---
 
 ## Usuários de acesso
 
@@ -67,28 +185,90 @@ http://localhost:8080
 | Administrador | `admin@brasiltravel.com` | `Admin123` |
 | Cliente | `cliente@brasiltravel.com` | `Cliente123` |
 
-## Observações de dados
+---
 
-Por padrão, a aplicação recria dados comerciais de demonstração ao iniciar:
+## Dados de demonstração
+
+Por padrão, a aplicação recria dados comerciais de demonstração ao iniciar.
+
+Essa configuração está definida em:
+
+```properties
+app.dados-exemplo.recriar=${APP_DADOS_EXEMPLO_RECRIAR:true}
+```
+
+Com isso, o sistema gera automaticamente:
 
 - destinos brasileiros;
 - aeroportos nacionais;
 - companhias aéreas;
-- voos futuros de 27/09/2026 a 27/10/2026;
-- solicitações históricas distribuídas de forma proporcional de 01/01/2026 a 27/09/2026;
-- capacidades comerciais reduzidas nos voos para tornar o relatório de ocupação mais útil na demonstração.
+- voos futuros;
+- solicitações históricas;
+- dados para os relatórios.
 
-Os relatórios foram pensados para usar o período histórico de 01/01/2026 a 27/09/2026.
+Os voos futuros são gerados no período de:
+
+```text
+27/09/2026 a 27/10/2026
+```
+
+As solicitações históricas são distribuídas no período de:
+
+```text
+01/01/2026 a 27/09/2026
+```
+
+Os relatórios foram pensados para utilizar esse período histórico como base de demonstração.
+
+---
 
 ## Relatórios disponíveis
 
-- Viagens por companhia aérea;
-- Ocupação e disponibilidade de voos;
-- Demanda por destino.
+O sistema possui três relatórios principais:
 
-Todos os relatórios possuem filtro obrigatório por status do pedido, com valor padrão `Finalizada`, além de período, companhia aérea e múltiplos aeroportos de origem/destino.
+1. Viagens por companhia aérea;
+2. Ocupação e disponibilidade de voos;
+3. Demanda por destino.
 
-## Backup/dump do PostgreSQL
+Todos os relatórios possuem filtro obrigatório por status, com valor padrão:
+
+```text
+Finalizada
+```
+
+Também há filtros por período, companhia aérea e aeroportos de origem e destino, conforme o tipo de relatório.
+
+---
+
+## Regras principais do sistema
+
+### Solicitações de viagem
+
+O cliente pode criar uma solicitação selecionando:
+
+- aeroporto de origem;
+- destino;
+- data de ida;
+- voo de ida;
+- data de volta;
+- voo de volta;
+- quantidade de passageiros.
+
+A data de volta deve ser posterior à data de ida.
+
+### Voos
+
+A área administrativa permite cadastrar, editar, consultar e remover voos.
+
+A listagem administrativa de voos exibe apenas voos futuros e utiliza paginação de 20 registros por página, preservando os filtros de aeroporto de origem e destino.
+
+### Status das solicitações
+
+As solicitações podem ser acompanhadas por status, permitindo controle administrativo do andamento de cada pedido.
+
+---
+
+## Backup e restauração do banco
 
 Para gerar um dump do banco local pelo PowerShell:
 
@@ -96,20 +276,43 @@ Para gerar um dump do banco local pelo PowerShell:
 pg_dump -U postgres -d brasiltravel -F p -f brasiltravel_dump.sql
 ```
 
-Para restaurar em outro ambiente:
+Para restaurar o dump em outro ambiente local:
 
 ```powershell
 psql -U postgres -d brasiltravel -f brasiltravel_dump.sql
 ```
 
-## Ajuste de desempenho — Gerenciamento de voos
+---
 
-A listagem administrativa de voos exibe apenas voos futuros e usa paginação de 20 registros por página, preservando os filtros de aeroporto de origem e destino. Isso evita travamentos visuais quando o banco está povoado com muitas combinações de voos.
+## Estrutura básica do projeto
 
+```text
+src/
+ └── main/
+     ├── java/
+     │   └── br/com/brasiltravel/brasiltravel/
+     │       ├── config/
+     │       ├── controller/
+     │       ├── model/
+     │       ├── repository/
+     │       └── service/
+     └── resources/
+         ├── templates/
+         ├── static/
+         └── application.properties
+```
+
+---
 
 ## Vídeo de demonstração
 
-[https://youtu.be/codigo-do-video](https://youtu.be/ZvkA1D1h6o0)
+Link do vídeo de apresentação:
+
+```text
+https://youtu.be/ZvkA1D1h6o0
+```
+
+---
 
 ## Equipe
 
